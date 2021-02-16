@@ -27,6 +27,7 @@ def estimateSpeed(location1, location2):
 	
 
 def trackMultipleObjects():
+	# print(video.get(cv2.CAP_PROP_FPS))
 	rectangleColor = (0, 255, 0)
 	frameCounter = 0
 	currentCarID = 0
