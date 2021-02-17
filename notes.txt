@@ -1,5 +1,43 @@
 
+### idei intermediare
 sa imi iau o singura suprafata unde sa caute dupa masini. Si suprafata aia e sigur
 ca o sa aiba un anumit numar de pixel per metru
+
+### requirements to run the project:
+
+
+PyTorch
+Python 3.7
+haar classifier
+
+cmake==3.12.0
+dlib==19.16.0
+numpy==1.15.3
+opencv-python==3.4.3.18
+pip install pytesseract
+sudo apt install tesseract-ocr
+sudo apt install libtesseract-dev
+
+### un fel de todo cu ce ar trebui sa fac
+
+sa antrenez cu pytorch o retea neuronala pt recunoastere de caractere
+exista retele deja antrenate
+
+sa lucrez in google collab ca n-am sanse pe gpu-ul meu
+
+https://adventuresinmachinelearning.com/convolutional-neural-networks-tutorial-in-pytorch/?fbclid=IwAR0p2bi1alxtVZkrJxmjsieP5Rpc51F6U1h2Bw2L1drXuTNqmytmKisWZPo
+
+
+### pasi development LPR
+1. fac development la un sistem de recunoastere a nr de inmatriculare cu jupyter notebook
+2. fac teste pe diferite poze
+3. il integrez in main system
+
+
+Import filmare 4k, fac resize la hd 720p
+Vad unde is masinile, dupa preiau imaginea mare 4k si scalez coordonatele pentru masina 
+astfel am o imagine mai detaliata cu nr de inmatriculare
+pe aia aplic operatiile de LPR
+
 
 

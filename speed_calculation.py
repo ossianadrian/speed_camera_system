@@ -6,7 +6,7 @@ import globals
 # cascade haaR classifier for cars
 CAR_CASCADE_HAAR_CLASSIFIER = CascadeClassifier('car_haar_classifier.xml')
 # import video
-VIDEO = VideoCapture('test2.mp4')
+VIDEO = VideoCapture('test4k.mp4')
 
 
 def calculateSpeed(point1, point2, FPS, PPM):
@@ -59,6 +59,9 @@ def trackCars():
         ret, image_from_video = VIDEO.read()
         # Count current frame
         frame_cnt = frame_cnt + 1
+
+        # create a copy of the 4k image
+        original_image_4k = image_from_video
 
         # if video is over, break
         if type(image_from_video) == type(None):
@@ -159,7 +162,8 @@ def trackCars():
                     putText(modified_image, "[" + str(i) + "] " + str(int(speed_of_cars[i])) + "km/h", (int(x1 + w1/2), int(y1-8)), 3 , 0.6 , (255, 255, 255), 2)
                     if extracted_cars[i] == None:
                         print('[LPR] Extracted image for LPR for car with id = ' + str(i) + ' having the speed = ' + str(speed_of_cars[i]) + 'km/h')
-                        imwrite('ExtractedImageForLPR' + str(i) + '.png', image_from_video[y2:(y2 + h2), x2:(x2 + w2)])
+                        # imwrite('ExtractedImageForLPR' + str(i) + '.png', image_from_video[y2:(y2 + h2), x2:(x2 + w2)])
+                        imwrite('ExtractedImageForLPR' + str(i) + '.png', original_image_4k[int(y2*globals.IMG_720p_TO_2160p):(int(y2*globals.IMG_720p_TO_2160p) + int(h2*globals.IMG_720p_TO_2160p)), int(x2*globals.IMG_720p_TO_2160p):(int(x2*globals.IMG_720p_TO_2160p) + int(w2*globals.IMG_720p_TO_2160p))])
                         extracted_cars[i] = 1
 
 

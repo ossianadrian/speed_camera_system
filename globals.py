@@ -31,3 +31,7 @@ A = 0
 B = 0
 C = 0
 
+# constant for getting relation between 720p image and 4k image
+
+IMG_720p_TO_2160p = 2.986111111
+
