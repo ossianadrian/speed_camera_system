@@ -1,4 +1,4 @@
-<<<<<<< HEAD
-=======
+# Project Speed Ticketing System
 
->>>>>>> 7d3f1b4ed7fd81717a91411e051b0535a7a397cc
+This is a project developed in python
+
