@@ -50,8 +50,8 @@ def trackCars():
         classNames = f.read().rstrip('\n').split('\n')
 
     # read the conf file and weights of yolov3
-    modelConfiguration = 'yolov3.cfg'
-    modelWeights = 'yolov3.weights'
+    modelConfiguration = 'yolov3_LPR.cfg'
+    modelWeights = 'yolov3_LPR.weights'
 
     net = cv2.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
