@@ -63,7 +63,8 @@ def trackCars():
 
 
         # convert image to square to avoi error: (-215:Assertion failed) !ssize.empty() in function 'resize'
-        crop_img = img[0:0+1080, 0:0+1080]
+        # crop_img = img[0:0+1080, 0:0+1080]
+        crop_img = img
         # convert image in a format that yolov3 understands aka blob
 
         blob = cv2.dnn.blobFromImage(crop_img, 1/255, (whT, whT), [0,0,0], 1, crop = False)

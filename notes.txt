@@ -23,8 +23,6 @@ sudo apt install libtesseract-dev
 sa antrenez cu pytorch o retea neuronala pt recunoastere de caractere
 exista retele deja antrenate
 
-sa lucrez in google collab ca n-am sanse pe gpu-ul meu
-
 https://adventuresinmachinelearning.com/convolutional-neural-networks-tutorial-in-pytorch/?fbclid=IwAR0p2bi1alxtVZkrJxmjsieP5Rpc51F6U1h2Bw2L1drXuTNqmytmKisWZPo
 
 
@@ -39,5 +37,14 @@ Vad unde is masinile, dupa preiau imaginea mare 4k si scalez coordonatele pentru
 astfel am o imagine mai detaliata cu nr de inmatriculare
 pe aia aplic operatiile de LPR
 
+
+Sa fac o corectie a imaginii sa o vad ca si din fata
+dupa sa rezolv problema cu pytesseract
+https://medium.com/@quangnhatnguyenle/detect-and-recognize-vehicles-license-plate-with-machine-learning-and-python-part-3-recognize-be2eca1a9f12
+
+
+
+
+####
 
 
