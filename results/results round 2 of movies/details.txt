@@ -1,0 +1,21 @@
+distanta dintre cele 2 drepte pe trotuarul din stanga
+48.25 pasi
+1 pas = 28.5cm
+distanta calculata = 13.75
+
+
+viteza masinii in bord = 70km/h
+
+
+START_POINT = (57, 488)
+START_POINT_LIST = [57, 488]
+END_POINT = (476, 470)
+END_POINT_LIST = [476, 470]
+
+START_POINT2 = (154, 626)
+START_POINT_LIST2 = [154, 626]
+END_POINT2 = (915, 549)
+END_POINT_LIST2 = [915, 549]
+
+
+distanceBetweenThe2Lines = 15.75

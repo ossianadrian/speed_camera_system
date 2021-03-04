@@ -59,6 +59,8 @@ db.sqlite3
 
 # YoloV3 stuff
 *.weights
+# mp4 files
+*.mp4
 
 # Flask stuff:
 instance/

@@ -9,7 +9,7 @@ import os
 # cascade haar classifier for cars
 CAR_CASCADE_HAAR_CLASSIFIER = cv2.CascadeClassifier('car_haar_classifier.xml')
 # import video
-VIDEO = cv2.VideoCapture('test4k.mp4')
+VIDEO = cv2.VideoCapture('./VideoTests/test6.mp4')
 
 
 def calculateSpeed(point1, point2, FPS, PPM):
@@ -21,8 +21,10 @@ def calculateSpeed(point1, point2, FPS, PPM):
 
 def calculateAverageSpeed(entryFrame, exitFrame, FPS ,distanceBetweenThe2Points):
     number_of_frames = exitFrame - entryFrame
-    print(number_of_frames)
+    # print(number_of_frames)
     time = number_of_frames / FPS
+    if time == 0:
+        time = 1
     speed = distanceBetweenThe2Points / time
     return speed * globals.MS_KMPH
 
@@ -280,8 +282,8 @@ def trackCars():
                         if x_vrp != 0:
                             print('[LPR] License plate position detected for car with id = ' + str(i) )
                             # draw rectangle to highlight license plate
-                            cv2.rectangle(cropped_image_4k, (x_vrp, y_vrp), (x_vrp + w_vrp + 7, y_vrp + h_vrp + 7), (0, 255 , 0), 2)
-                            cropped_license_plate = cropped_image_4k[y_vrp:y_vrp+h_vrp+7, x_vrp:x_vrp+w_vrp+7]
+                            cv2.rectangle(cropped_image_4k, (x_vrp - 4, y_vrp - 4), (x_vrp + w_vrp + 8, y_vrp + h_vrp + 8), (0, 255 , 0), 2)
+                            cropped_license_plate = cropped_image_4k[y_vrp - 4:y_vrp+h_vrp+8, x_vrp - 4:x_vrp+w_vrp+8]
                             # read text from image
                             result_from_easyOCR = reader.readtext(cropped_license_plate)
                             actual_license_plate_number = result_from_easyOCR[0][-2]

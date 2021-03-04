@@ -46,5 +46,36 @@ https://medium.com/@quangnhatnguyenle/detect-and-recognize-vehicles-license-plat
 
 
 ####
+daca pare ca imi pune prea multe id-uri cu masini, sa ma joc un pic cu tracker_accuracity
+
+
+
+
+#### interfata
+
+ElectronJS -- pot sa instalezi si bootstrap pe el
+
+html cu bootstrap
+
+flask app ? nu cred
+
+django rest framework
+
+https://youtu.be/iy2aKf9AAvc?t=575     -- aici spune nenea cum sa fac deploy la app sa mearga cu click fara sa instalezi NIMIC
+
+
+
+####  ToDo:
+- invata bootstrap sa fac paginile faine de html
+- django rest framework: is 2 metode si sa o aleg pe aia simpla
+
+- fac ceva animatie cand proceseara video-ul si un progress bar
+
+### in viitor ce mai pot face
+prima data fac aplicatia simpla sa imi ruleze cu gui
+vad cum s-o impachetez ca un executabil
+deploy pe app engine google
+
+
 
 
