@@ -19,3 +19,32 @@ END_POINT_LIST2 = [915, 549]
 
 
 distanceBetweenThe2Lines = 15.75
+
+
+
+
+
+
+
+Inainte sa fac transformare de perspectiva
+Proiectie pe orizontala (ca si cum ar pica pixelii pe marginea de jos)
+=> pot sa incadrez caracterele
+=> sa ma asigur ca caracterele nu au gapuri, extractie de scheleton, distance transform
+
+
+Algoritm clasic de recunoastere a caracterelor
+clasificator naiv bayesian pentru OCR (posibil performante scazute dar merita incercat)
+
+Fac pentru o litera
+
+Transformata de distanta
+
+Fac pentru 2 litere asemanatoare Q si O, M N
+
+
+
+
+http://users.utcluj.ro/~raluca/prs/04_prs_lab_ro_DT.pdf
+http://users.utcluj.ro/~raluca/prs.html
+
+

@@ -74,3 +74,14 @@ classesFile = 'coco.names'
 global classNames
 classNames = []
 global net 
+
+
+# parameters for car detection yolov3
+
+
+global classesFile2
+classesFile2 = 'coco_car_detection.names'
+global classNames2
+classNames2 = []
+global net2 
+

@@ -12,6 +12,7 @@ classNames = []
 #confidence threshhold
 confThreshHold = 0.5
 
+
 # the higher, the agressive and less number of bounding boxes
 nmsThreshHold = 0.6
 
@@ -35,6 +36,8 @@ def findObjects(outputs, img, classNames):
                 confs.append(float(confidence))
 
     indices = cv2.dnn.NMSBoxes(bbox, confs, confThreshHold, nmsThreshHold)
+    #check if it is car, motorbike, truck or bus ( 2 3 5 7 )
+
 
     for i in indices:
         i = i[0]
@@ -50,8 +53,8 @@ def trackCars():
         classNames = f.read().rstrip('\n').split('\n')
 
     # read the conf file and weights of yolov3
-    modelConfiguration = 'yolov3_LPR.cfg'
-    modelWeights = 'yolov3_LPR.weights'
+    modelConfiguration = 'yolov3.cfg'
+    modelWeights = 'yolov3_original.weights'
 
     net = cv2.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)

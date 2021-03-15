@@ -5,11 +5,12 @@ import cv2
 import numpy as np
 import easyocr
 import os
+from random import randrange
 
 # cascade haar classifier for cars
 CAR_CASCADE_HAAR_CLASSIFIER = cv2.CascadeClassifier('car_haar_classifier.xml')
 # import video
-VIDEO = cv2.VideoCapture('./VideoTests/test6.mp4')
+VIDEO = cv2.VideoCapture('./VideoTests/test9.mp4')
 
 
 def calculateSpeed(point1, point2, FPS, PPM):
@@ -111,6 +112,68 @@ def extractLicensePlate(img):
     return 0,0,0,0,0,0
 
 
+def configureYoloV3_car_detection():
+    
+    # read file with classes that yolov3 recognizes
+    with open(globals.classesFile2, 'rt') as f:
+        globals.classNames2 = f.read().rstrip('\n').split('\n')
+    # read the conf file and weights of yolov3
+    modelConfiguration = 'yolov3_car_detection.cfg'
+    modelWeights = 'yolov3_car_detection.weights'
+    
+    globals.net2 = cv2.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
+    globals.net2.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
+    globals.net2.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)    
+    
+
+def detectCars(img):
+    blob = cv2.dnn.blobFromImage(img, 1/255, (globals.whT, globals.whT), [0,0,0], 1, crop = False)
+    globals.net2.setInput(blob)
+    
+    layerNames = globals.net2.getLayerNames()
+    # print(layerNames)
+    globals.net2.getUnconnectedOutLayers()
+    outputNames = [layerNames[i[0]-1] for i in globals.net2.getUnconnectedOutLayers()]
+    # get the output of the 3 layers. Outputs is a list
+    outputs = globals.net2.forward(outputNames)
+    
+    #find objects in picture
+    hT, wT, cT = img.shape
+    # list with x,y,w,h
+    bbox = []
+    classIds = []
+    # confidence values
+    confs = []
+    for output in outputs:
+        for det in output:
+            scores = det[5:]
+            classId = np.argmax(scores)
+            confidence = scores[classId]
+            if confidence > globals.confThreshHold:
+                w, h = int(det[2] * wT), int(det[3] * hT)
+                x, y = int(det[0] * wT - w/2), int(det[1] * hT - h/2)
+                bbox.append([x,y,w,h])
+                classIds.append(classId)
+                confs.append(float(confidence))
+    indices = cv2.dnn.NMSBoxes(bbox, confs, globals.confThreshHold, globals.nmsThreshHold)
+    x, y, w, h = 0, 0, 0, 0
+    carsDetected = []
+    for i in indices:
+        i = i[0]
+        box = bbox[i]
+        x, y, w, h = box[0], box[1], box[2], box[3]
+        # return coordinates, confidence and "vehicle registration plate"
+        # print(globals.classNames[classIds[i]].upper())
+        objectDetected = globals.classNames2[classIds[i]]
+        # check if it is car, motorbike, truck or bus ( 2 3 5 7 ) and check if the height right bottom corner has height greater than 440 to accuratly detect the car in the video
+        if (objectDetected == "car" or objectDetected == "motorbike" or objectDetected == "bus" or objectDetected == "truck") and ( y + h > 440):
+            carsDetected.append([x, y, w, h])
+        # return x, y, w, h, confs[i], globals.classNames[classIds[i]].upper()
+        # cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255, 0), 2)
+        # cv2.putText(img, f'{globals.classNames[classIds[i]].upper()} {int(confs[i] * 100)}%' , (x, y-10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0,255,0), 2)
+    # print(carsDetected)
+    return carsDetected
+
 
 def trackCars():
 
@@ -144,6 +207,7 @@ def trackCars():
     calculateLineEcuationForLowerLine(globals.START_POINT_LIST2, globals.END_POINT_LIST2)
     # preconfigure yoloV3 - only once
     configureYoloV3()
+    configureYoloV3_car_detection()
     # configure reader - only once
     reader = easyocr.Reader(['en'])
 
@@ -188,7 +252,9 @@ def trackCars():
             #convert image to grayscale
             grayscale_image = cv2.cvtColor(image_from_video, cv2.COLOR_BGR2GRAY)
             # use classifier to detect cars
-            cars_detected = CAR_CASCADE_HAAR_CLASSIFIER.detectMultiScale(grayscale_image, 1.1, 13, 18, (24, 24))
+            # cars_detected = CAR_CASCADE_HAAR_CLASSIFIER.detectMultiScale(grayscale_image, 1.1, 13, 18, (24, 24)) #maybe 13 instead of 18
+            # use yolov3 to find cars
+            cars_detected = detectCars(image_from_video)
             
             for (int32_x, int32_y, int32_w, int32_h) in cars_detected:
                 #cast to integer python
@@ -274,6 +340,7 @@ def trackCars():
                         # cv2.imwrite('ExtractedImageForLPR' + str(i) + '.png', image_from_video[y2:(y2 + h2), x2:(x2 + w2)])
                         # get a more detailed image from original 4k footage. Scale accordingly
                         cropped_image_4k = original_image_4k[int(y2*globals.IMG_720p_TO_2160p):(int(y2*globals.IMG_720p_TO_2160p) + int(h2*globals.IMG_720p_TO_2160p)), int(x2*globals.IMG_720p_TO_2160p):(int(x2*globals.IMG_720p_TO_2160p) + int(w2*globals.IMG_720p_TO_2160p))]
+                        # cv2.imwrite(os.path.join(img_folder_path,'ExtractedImgForLPR'  + str(i) + '.png'), cropped_image_4k)
                         # this is when working with fHD footage
                         # cropped_image_4k = image_from_video[y2:(y2 + h2), x2:(x2 + w2)]
                         
