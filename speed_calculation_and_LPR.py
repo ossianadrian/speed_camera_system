@@ -1,4 +1,5 @@
 import globals
+import KNN_OCR
 from math import sqrt, pow
 import dlib
 import cv2
@@ -10,7 +11,7 @@ from random import randrange
 # cascade haar classifier for cars
 CAR_CASCADE_HAAR_CLASSIFIER = cv2.CascadeClassifier('car_haar_classifier.xml')
 # import video
-VIDEO = cv2.VideoCapture('./VideoTests/test9.mp4')
+VIDEO = cv2.VideoCapture('./VideoTests/h264/test6.mp4')
 
 
 def calculateSpeed(point1, point2, FPS, PPM):
@@ -171,6 +172,7 @@ def detectCars(img):
         # return x, y, w, h, confs[i], globals.classNames[classIds[i]].upper()
         # cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255, 0), 2)
         # cv2.putText(img, f'{globals.classNames[classIds[i]].upper()} {int(confs[i] * 100)}%' , (x, y-10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0,255,0), 2)
+        # cv2.imshow("car_detection", img)
     # print(carsDetected)
     return carsDetected
 
@@ -236,7 +238,7 @@ def trackCars():
         for car in car_tracker_dict.keys():
             #Update the tracking accuracity
             tracker_accuracity = car_tracker_dict[car].update(image_from_video)
-            if tracker_accuracity < 4:
+            if tracker_accuracity < 6:
                 cars_to_delete.append(car)
 
         for car in cars_to_delete:
@@ -252,9 +254,9 @@ def trackCars():
             #convert image to grayscale
             grayscale_image = cv2.cvtColor(image_from_video, cv2.COLOR_BGR2GRAY)
             # use classifier to detect cars
-            # cars_detected = CAR_CASCADE_HAAR_CLASSIFIER.detectMultiScale(grayscale_image, 1.1, 13, 18, (24, 24)) #maybe 13 instead of 18
+            cars_detected = CAR_CASCADE_HAAR_CLASSIFIER.detectMultiScale(grayscale_image, 1.1, 13, 18, (24, 24)) #maybe 13 instead of 18
             # use yolov3 to find cars
-            cars_detected = detectCars(image_from_video)
+            # cars_detected = detectCars(image_from_video)
             
             for (int32_x, int32_y, int32_w, int32_h) in cars_detected:
                 #cast to integer python
@@ -316,13 +318,13 @@ def trackCars():
                 # if (speed_of_cars[i] == 0 or speed_of_cars[i] == None) and y1 >= 275 and y1 <= 450:
 
                 # modified_image = cv2.line(modified_image, (int(x_center), int(y_center)), END_POINT, (0,0,255), 9)
-                if (speed_of_cars[i] == 0 or speed_of_cars[i] == None) and checkIfPointIsBelowLine(globals.A, globals.B, globals.C, [x2+w2, y2+w2]) and cars_under_first_line[i] == None:
+                if (speed_of_cars[i] == 0 or speed_of_cars[i] == None) and checkIfPointIsBelowLine(globals.A, globals.B, globals.C, [x2+w2, y2+h2]) and cars_under_first_line[i] == None:
                     #store initial frame_cnt for enter, and the frame for exit
                     frameOfEntryPoint[i] = frame_cnt
                     print('[Entry point] The car with id = ' + str(i) + ' has entered the speed calculation zone')
                     cars_under_first_line[i] = 1
                     # speed_of_cars[i] = calculateSpeed(cars_point1[i], cars_point2[i], globals.FPS ,globals.PPM)
-                if (speed_of_cars[i] == 0 or speed_of_cars[i] == None) and checkIfPointIsBelowLine(globals.A2, globals.B2, globals.C2, [x2+w2, y2+w2]) and cars_under_second_line[i] == None:
+                if (speed_of_cars[i] == 0 or speed_of_cars[i] == None) and checkIfPointIsBelowLine(globals.A2, globals.B2, globals.C2, [x2+w2, y2+h2]) and cars_under_second_line[i] == None:
                     frameOfExitPoint[i] = frame_cnt
                     print('[Exit point] The car with id = ' + str(i) + ' has exited the speed calculation zone')
                     speed_of_cars[i] = calculateAverageSpeed(frameOfEntryPoint[i], frameOfExitPoint[i], globals.FPS, globals.distanceBetweenThe2Lines)
@@ -348,8 +350,14 @@ def trackCars():
                         x_vrp, y_vrp, w_vrp, h_vrp, confidence, type_of_object_detected = extractLicensePlate(cropped_image_4k)
                         if x_vrp != 0:
                             print('[LPR] License plate position detected for car with id = ' + str(i) )
+                            # use KNN OCR
+                            # cropped_license_plate = cropped_image_4k[y_vrp-5:y_vrp+h_vrp, x_vrp:x_vrp+w_vrp+5]
+                            # actual_license_plate_number = KNN_OCR.cleanLicensePlateAndApplyKNN(cropped_license_plate)
+                            # license_plate_numbers[i] = actual_license_plate_number
+                            # confidence_license_plate_number = 0.8
                             # draw rectangle to highlight license plate
                             cv2.rectangle(cropped_image_4k, (x_vrp - 4, y_vrp - 4), (x_vrp + w_vrp + 8, y_vrp + h_vrp + 8), (0, 255 , 0), 2)
+                            # use easy OCR
                             cropped_license_plate = cropped_image_4k[y_vrp - 4:y_vrp+h_vrp+8, x_vrp - 4:x_vrp+w_vrp+8]
                             # read text from image
                             result_from_easyOCR = reader.readtext(cropped_license_plate)
