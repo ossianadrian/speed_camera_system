@@ -389,6 +389,7 @@ def trackCars():
         
         # Write output image to the new video file
         # output_video.write(modified_image)
+        
 
     cv2.destroyAllWindows()
 
